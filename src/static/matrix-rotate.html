@@ -34,6 +34,11 @@
         </table>
 
         <h3>Rotated matrix:</h3>
+        <table>
+            <tr v-for="row in rotatedMatrix">
+                <td v-for="entry in row">{{ entry }}</td>
+            </tr>
+        </table>
     </div>
 
     <script>
@@ -42,7 +47,7 @@
                 return {
                     title: 'Welcome to the Matrix Rotation page!',
                     description: 'This tool rotates a square matrix by 90 degrees. Try it out!',
-                    order: 3,
+                    order: 5,
                     maxOrder: 100,
                     newOrderText: '',
                 };
@@ -57,6 +62,30 @@
                         }
                     }
                     return matrix;
+                },
+
+                rotatedMatrix() {
+                    let rotated = [...this.matrix];
+
+                    for (let i = 0; i < this.order/2; i++) {
+                        for (let j = i; j < this.order - i - 1; j++) {
+                            let switchVal = rotated[i][j];
+                            let holdVal = rotated[j][this.order - 1 - i];
+                            rotated[j][this.order - 1 - i] = switchVal;
+
+                            switchVal = holdVal;
+                            holdVal = rotated[this.order - 1 - i][this.order - 1 - j];
+                            rotated[this.order - 1 - i][this.order - 1 - j] = switchVal;
+
+                            switchVal = holdVal;
+                            holdVal = rotated[this.order - 1 - j][i];
+                            rotated[this.order - 1 -j][i] = switchVal;
+
+                            rotated[i][j] = holdVal;
+                        }
+                    }
+
+                    return rotated;
                 },
             },
             methods: {
