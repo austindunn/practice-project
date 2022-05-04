@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1.0, user-scalable=0" />
+    <title>Linked lists</title>
+</head>
+<body>
+    <script type="text/javascript" src="./js/vue.global.min.js"></script>
+
+    <div id="app">
+        <h1>{{ title }}</h1>
+        <h2>{{ description }}</h2>
+
+        <input v-model="itemNameToAdd" placeholder="enter thing to add to stack" @keyup.enter="pushItemToStack">
+        <button @click="pushItemToStack">Push item to stack</button>
+
+        <p>Your list as a string: {{ listString }}</p>
+
+        <button @click="popItemFromStack">Pop from the stack</button>
+    </div>
+
+    <script>
+        class LinkedStack {
+            head = null;
+
+            push(item) {
+                item.next = this.head;
+                this.head = item;
+            }
+
+            pop() {
+                if (!this.head) {
+                    return null;
+                }
+
+                const toPop = this.head;
+                this.head = toPop.next;
+
+                return toPop;
+            }
+        }
+
+        class StackItem {
+            name = '';
+            next = null;
+
+            constructor(name) {
+                this.name = name;
+            }
+        };
+
+        const app = Vue.createApp({
+            data: () => {
+                return {
+                    title: 'Welcome to the Linked List page!',
+                    description: 'This tool is an implementation of a stack using a linked list. Try it out!',
+                    list: new LinkedStack(),
+                    itemNameToAdd: '',
+                };
+            },
+            computed: {
+                listString() {
+                    if (this.list.head == null) {
+                        return '';
+                    }
+                    
+                    let str = '';
+                    let crt = this.list.head;
+                    while (crt.next != null) {
+                        str += crt.name + ', '
+                        crt = crt.next;
+                    }
+                    str += crt.name;
+
+                    return str;
+                },
+            },
+            methods: {
+                pushItemToStack() {
+                    if (!this.itemNameToAdd) {
+                        return;
+                    }
+
+                    newItem = new StackItem(this.itemNameToAdd);
+                    this.list.push(newItem);
+
+                    this.itemNameToAdd = '';
+                },
+
+                popItemFromStack() {
+                    const popped = this.list.pop();
+                    if (!popped) {
+                        alert('You\'ve reached the bottom of the stack!');
+                        return;
+                    }
+
+                    alert(popped.name);
+                }
+            },
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+
+</html>

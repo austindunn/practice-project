@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1.0, user-scalable=0" />
+    <title>Rotate matrix</title>
+
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript" src="./js/vue.global.min.js"></script>
+
+    <div id="app">
+        <h1>{{ title }}</h1>
+        <h2>{{ description }}</h2>
+
+        <p>Current order: {{ order }}</p>
+        <input v-model="newOrderText" placeholder="Enter matrix order" @keyup.enter="setOrder">
+        <button @click="setOrder">Set order</button>
+
+        <h3>Original matrix:</h3>
+        <table>
+            <tr v-for="row in matrix">
+                <td v-for="entry in row">{{ entry }}</td>
+            </tr>
+        </table>
+
+        <h3>Rotated matrix:</h3>
+    </div>
+
+    <script>
+        const app = Vue.createApp({
+            data: () => {
+                return {
+                    title: 'Welcome to the Matrix Rotation page!',
+                    description: 'This tool rotates a square matrix by 90 degrees. Try it out!',
+                    order: 3,
+                    maxOrder: 100,
+                    newOrderText: '',
+                };
+            },
+            computed: {
+                matrix() {
+                    let matrix = [];
+                    for (let i = 0; i < this.order; i++) {
+                        matrix.push([]);
+                        for (let j = 0; j < this.order; j++) {
+                            matrix[i][j] = i * this.order + j + 1;
+                        }
+                    }
+                    return matrix;
+                },
+            },
+            methods: {
+                setOrder() {
+                    const newOrder = parseInt(this.newOrderText);
+                    if (!newOrder || newOrder > this.maxOrder || newOrder < 1) {
+                        alert('New order invalid. Order must be between 1 and ' + this.maxOrder + '.');
+                        return;
+                    }
+
+                    this.order = newOrder;
+                }
+            },
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+
+</html>
