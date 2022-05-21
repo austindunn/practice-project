@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1.0, user-scalable=0" />
+    <title>Heapsort array of ints</title>
+
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript" src="./js/vue.global.min.js"></script>
+
+    <div id="app">
+        <h1>{{ title }}</h1>
+        <h2>{{ description }}</h2>
+
+        <input v-model="inputArrayAsText" placeholder="enter a comma-separated list to sort" @keyup.enter="setArrayToSort">
+        <button @click="setArrayToSort">Sort</button>
+
+        <p>The array to sort is: {{ unsorted }}</p>
+        <p>The initial heaped version is: {{ maxHeapUnsorted }}</p>
+        <p>The sorted version is: {{ sorted }}</p>
+    </div>
+
+    <script>
+        const app = Vue.createApp({
+            data: () => {
+                return {
+                    title: 'Welcome to the Heapsort array of ints page!',
+                    description: 'This tool sorts an array of ints using heapsort. Try it out!',
+                    inputArrayAsText: '9,2,6,4,3,5,1',
+                    unsorted: [],
+                };
+            },
+            computed: {
+                maxHeapUnsorted() {
+                    const maxHeap = [...this.unsorted];
+                    this.buildMaxHeap(maxHeap);
+                    return maxHeap;
+                },
+                sorted() {
+                    const sorted = [...this.maxHeapUnsorted];
+                    this.heapsort(sorted);
+                    return sorted;
+                }
+            },
+            methods: {
+                setArrayToSort() {
+                    this.unsorted = [];
+                    const commaSeparatedValues = this.inputArrayAsText.split(',');
+                    for (let i = 0; i < commaSeparatedValues.length; i++) {
+                        const crtVal = parseInt(commaSeparatedValues[i]);
+                        if (!isNaN(crtVal)) {
+                            this.unsorted.push(parseInt(commaSeparatedValues[i]));
+                        }
+                    }
+                },
+                heapsort(unsorted) {
+                    let maxIndex = unsorted.length - 1;
+                    while (maxIndex >= 0) {
+                        this.swap(unsorted, 0, maxIndex);
+                        maxIndex--;
+                        this.heapify(unsorted, 0, maxIndex);
+                    }
+                },
+                buildMaxHeap(arr) {
+                    const greatestIndexWithChildren = Math.floor(arr.length/2) - 1;
+                    for (let i = greatestIndexWithChildren; i >= 0; i--) {
+                        this.heapify(arr, i, arr.length - 1);
+                    }
+                },
+                heapify(arr, i, maxIndex) {
+                    const left = 2*i;
+                    const right = 2*i + 1;
+                    
+                    let max = i;
+                    if (left <= maxIndex && arr[left] > arr[max]) {
+                        max = left;
+                    }
+                    if (right <= maxIndex && arr[right] > arr[max]) {
+                        max = right;
+                    }
+
+                    if (max != i) { // value at i is less than value at at least one of its children
+                        this.swap(arr, i, max);
+                        this.heapify(arr, max, maxIndex);
+                    }
+                },
+                swap(arr, i, j) {
+                    const iValue = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = iValue;
+                },
+            },
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+
+</html>
