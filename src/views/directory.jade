@@ -1,0 +1,11 @@
+doctype html
+html
+    head
+        title Directory
+    body
+        h1 Welcome to Austin's practice project. Check out the links below.
+        ul
+            for page in pages
+                li: a(href='/' + page) #{page.substring(0, page.length - 5)} 
+            else
+                li Page list empty
