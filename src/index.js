@@ -8,7 +8,7 @@ const staticDirectoryPath = path.join(__dirname, '/static');
 app.use(express.json());
 app.use(express.static(staticDirectoryPath));
 
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 app.set('views', 'src/views');
 app.get('/', (req, res) => {
     const pages = [];
